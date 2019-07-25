@@ -14,15 +14,21 @@ import pickle
 from datetime import datetime
 import time
 
+'''
+
+'''
 def normalize_data(data_correlation_coeff, data_temperature, data_humidity):
-    
+    """normalize coefficients, temperature and humidity
+
+    constrain data to a certain range if necessary,
+    then normalize by (x - min) / (max - min) and add a dictionary
+    """
     max_value_correlation_coeff = np.max(data_correlation_coeff)
     min_value_correlation_coeff = np.min(data_correlation_coeff)
-    data_correlation_coeff = (data_correlation_coeff- min_value_correlation_coeff)/(max_value_correlation_coeff - min_value_correlation_coeff)
+    data_correlation_coeff = (data_correlation_coeff - min_value_correlation_coeff)/(max_value_correlation_coeff - min_value_correlation_coeff)
     
-    
-    data_temperature[np.where(data_temperature < -3)] = -3 
-    data_temperature[np.where(data_temperature > 50)] = 50 
+    data_temperature[np.where(data_temperature < -3)] = -3
+    data_temperature[np.where(data_temperature > 50)] = 50
     max_value_temperature = np.max(data_temperature)
     min_value_temperature = np.min(data_temperature)
     data_temperature = (data_temperature - min_value_temperature )/(max_value_temperature - min_value_temperature)
@@ -39,7 +45,8 @@ def normalize_data(data_correlation_coeff, data_temperature, data_humidity):
                   'humidity_max': max_value_humidity,
                   'humidity_min': min_value_humidity}
 
-    return data_correlation_coeff, data_temperature, data_humidity, scale_norm     
+    return data_correlation_coeff, data_temperature, data_humidity, scale_norm
+
 
 def generate_timestamp(data_day, data_time):
     
@@ -62,13 +69,15 @@ def generate_timestamp(data_day, data_time):
             print(i," files has generated time stamps" )
     
     timestamp_T = np.array(timestamp_T)
-  
+
     print("\ncomplete generating time stamp\n")
-    
+
     return timestamp_T
-    
+
+
 def read_pickle_plate_dataset(filename_pickle):
-    
+    """Read raw data and return five members
+    """
     with open(filename_pickle, 'rb') as file:
         plate_ultrasonic_dataset = pickle.load(file)
         
@@ -84,8 +93,8 @@ def read_pickle_plate_dataset(filename_pickle):
     return dataset_original, data_temperature_original, data_humidity_original,\
     data_day_original, data_time_original
     
-def padding_dataset(data_correlation_coeff, data_temperature, data_humidity, data_day, data_time,\
-                    dataset_original, data_temperature_original, data_humidity_original, \
+def padding_dataset(data_correlation_coeff, data_temperature, data_humidity, data_day, data_time,
+                    dataset_original, data_temperature_original, data_humidity_original,
                     data_day_original, data_time_original, padding_size = 400, startpoint = 1):
     
     for i in range(startpoint, len(dataset_original)):
@@ -162,7 +171,21 @@ def data_mode(DATA_MODE, data_correlation_coeff, data_temperature, data_humidity
 
 
 def create_dataset(DATA_MODE, file1, file2, N_FILE_TYPE):
-    
+    """Process raw data and create a new dataset for models to use.
+
+    Args:
+        DATA_MODE: the way of organizing data
+        file1: path of file consisting of data without mass
+        file2: path of file consisting of data with mass
+        N_FILE_TYPE: -
+
+    Returns:
+        A tuple containing following elements:
+        data_T, label_T, Tag, timestamp_T, tag_0, tag_1, scale_norm, data_type
+
+    Raises:
+        None
+    """
     dataset_original, data_temperature_original, data_humidity_original, \
     data_day_original, data_time_original = read_pickle_plate_dataset(file1)
      

@@ -71,8 +71,8 @@ def load_dataset(filename, if_save_dataset):
         print("*"*50)
         print("\n")
         
-        file1 = 'F:/Kang/Data/plate_ultrasonic_dataset_197_no_mass.pickle'
-        file2 = 'F:/Kang/Data/plate_ultrasonic_dataset_197_damage.pickle'
+        file1 = 'Data/plate_ultrasonic_dataset_197_no_mass.pickle'
+        file2 = 'Data/plate_ultrasonic_dataset_197_damage.pickle'
         
         data_T, label_T, Tag, timestamp_T, n_tag_0, n_tag_1, scale_norm, data_type = \
         create_data_for_deeplearning.create_dataset(DATA_MODE, file1, file2, N_FILE)
@@ -222,10 +222,11 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 if Loading_DATA:
 
-    filename_preprocess_data = 'F:/Kang/Data/plate_ultrasonic_dataset_197_process_' + DATA_MODE + '.pickle'
+    filename_preprocess_data = 'Data/plate_ultrasonic_dataset_197_process_' + DATA_MODE + '.pickle'
     
     data_T, label_T, Tag, timestamp_T, n_tag_0, n_tag_1, scale_norm, data_type = load_dataset(filename = filename_preprocess_data, if_save_dataset = SAVE_CREATED_DATA)
     
+    # decide whether data with mass need to be rid
     if WITH_MASS_LABEL:
     
         train_input, validation_input, train_label, validation_label,  data_type_train, data_type_test = \
@@ -420,7 +421,7 @@ if DETECTION_ANOMALY:
                                                      timestamp_eva = timestamp_T_test,\
                                                      data_mode = DATA_MODE,\
                                                      if_with_mass_data = WITH_MASS_LABEL)         
-     
+    
     else:
         cluster_centers = np.sort(clf.cluster_centers_, axis=0)
         predicted_labels = pairwise_distances_argmin(train_data_compressed, cluster_centers)     
