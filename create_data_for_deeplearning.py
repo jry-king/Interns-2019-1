@@ -177,7 +177,7 @@ def create_dataset(DATA_MODE, file1, file2, N_FILE_TYPE):
         DATA_MODE: the way of organizing data
         file1: path of file consisting of data without mass
         file2: path of file consisting of data with mass
-        N_FILE_TYPE: -
+        N_FILE_TYPE: 2 means data with mass in file2
 
     Returns:
         A tuple containing following elements:

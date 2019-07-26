@@ -63,7 +63,6 @@ class AutoEncoder(nn.Module):
         return encoded, decoded
 
 
-
 def train(model, iterator, optimizer, criterion, clip, device, correlationCoefficientList):
     
     model.train()    
